@@ -1,6 +1,11 @@
-- hosts: manager
+- hosts: bookGetter-api
   become: no
   become_user: ubuntu
   roles:
     - common
     - node
+
+- hosts: bookGetter-api
+  become: yes
+  roles:
+    - mongodb
