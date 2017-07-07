@@ -2,4 +2,5 @@
   become: yes
   gather_facts: no
   roles:
-    - ubuntu
+    - xvfb
+

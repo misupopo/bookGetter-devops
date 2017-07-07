@@ -1,25 +1,28 @@
 
-- name: download GPG key
-  raw: sudo wget -q -O - "https://dl-ssl.google.com/linux/linux_signing_key.pub" | sudo apt-key add -
+- name: Add google key
+  apt_key:
+    url: "https://dl-ssl.google.com/linux/linux_signing_key.pub"
+    state: present
 
-- name: add repository
-  raw: sudo sh -c "echo 'deb http://dl.google.com/linux/chrome/deb/ stable main' >> /etc/apt/sources.list"
+- name: Add repository
+  apt_repository:
+    repo: deb http://dl.google.com/linux/chrome/deb/ stable main
+    state: present
+    filename: 'google-chrome'
 
-- name: install xvfb firefox
+- name: Install packages
+  apt:
+    name: "{{item}}"
+    state: present
+    update_cache: yes
+  with_items:
+    - build-essential
+    - google-chrome-stable
+    - openjdk-9-jre
+
+- name: Install xvfb and firefox
   apt: pkg={{item}} state=latest
   with_items:
     - xvfb
     - firefox
 
-- name: install JRE
-  apt: pkg={{item}} state=latest
-  with_items:
-    - openjdk-8-jre
-
-- name: update apt-get
-  raw: sudo apt-get update -y
-
-- name: install google-chrome-stable
-  apt: pkg={{item}} state=latest
-  with_items:
-    - google-chrome-stable
